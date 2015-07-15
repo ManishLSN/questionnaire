@@ -1,0 +1,45 @@
+{
+	"type": "Collection",
+	"properties": {
+		"question": {
+			"name": "question",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "question",
+			"order": 0
+		},
+		"optionChoice": {
+			"name": "optionChoice",
+			"type": "number",
+			"typeLabel": "number",
+			"required": true,
+			"id": "optionChoice",
+			"order": 1
+		},
+		"options": {
+			"name": "options",
+			"type": "array",
+			"typeLabel": "array",
+			"required": true,
+			"id": "options",
+			"order": 2
+		},
+		"countYN": {
+			"name": "countYN",
+			"type": "array",
+			"typeLabel": "array",
+			"required": false,
+			"id": "countYN",
+			"order": 3
+		},
+		"countMultipleChoice": {
+			"name": "countMultipleChoice",
+			"type": "array",
+			"typeLabel": "array",
+			"required": false,
+			"id": "countMultipleChoice",
+			"order": 4
+		}
+	}
+}
