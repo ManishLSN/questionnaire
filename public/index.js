@@ -1,65 +1,43 @@
 var data=[];
-var ques=[];
-var optionChoice=[];
-var ids = [];
-var options = [];
-
-var q="";
-var optionsToBeShown=[],chartToBeShown=[],labelsToBeShown=[];
 var divStyle = {
-  backgroundColor: '#ffcc99'
+  backgroundColor: '#aaccaa'
 };
-var currentId='';
+
 var Component = React.createClass({
   
   getInitialState:function(){
-  return{ question:[],
-    id:ids,options:[]}
+  return{ question:[]}
   },
-  onclick:function(){
-  
-  },
-
   updateState:function(){
-   this.setState({question:data,id:ids});
-   console.log(this.state.question);
+   this.setState({question:data});
+  console.log(this.state.question);
   },
-    componentWillMount:function(){
-      var i=0
+  componentWillMount:function(){
+    
     dpd.ques.get(function(result,err){
     data = result;
-    for(i;i<result.length;i++)
-    {
-     ids.push(result[i].id);
-     ques.push(result[i].question);
-
-     optionChoice.push(result[i].optionChoice);
-     options.push(result[i].options);
-    }
-    console.log(ques);
-        console.log(ids);
-            console.log(optionChoice);
-                console.log(options);
-    
+   
     });
  
  
     },
     
-    componentDidMount:function(){
-    setTimeout(this.updateState,20);
+  componentDidMount:function(){
+    setTimeout(this.updateState,150);
      
     },
    
     render:function(){
-       q = this.state.question.map(function(question){
+      var q = this.state.question.map(function(question){
         return <Question questionTitle={question.question} id = {question.id} options ={question.options} optionChoice = {question.optionChoice}/>;
       });
       return(<ol>
       <form action="/index1.html">
-      <input type="submit" value="Post a Question"/>
+      <input type="submit"  className="btn btn-primary" value="Post a Question"/>
       </form>
+      <div className="panel-group" id="accordion">
           {q}
+          </div>
         </ol>
         
       );
@@ -68,15 +46,13 @@ var Component = React.createClass({
 
 var Question = React.createClass({
   getInitialState:function(){
-  return{options:[],
+  return{options:[],chart:[],
   random:0
   }
   },
-  componentDidMount:function(){
-   
-  },
-  updateState:function(op,ra){
-    this.setState({options:op,random:ra});
+ 
+  updateState:function(op,ch,ra){
+    this.setState({options:op,chart:ch,random:ra});
   },
   submitAns:function(id){
   var optionAns=[];
@@ -113,35 +89,49 @@ var Question = React.createClass({
   }
   });
 
-  setTimeout(this.updateState.bind(this,optionsToBeShown,Math.random()), 100);
-  setTimeout(function () { window.location.reload(); }, 200);
+ // setTimeout(this.updateState.bind(this,optionsToBeShown,chartToBeShown,Math.random()), 100);
+  setTimeout(function () { window.location.reload(); }, 50);
   },
   
   onclick:function(opti){
 
-   optionsToBeShown=[];
-   chartToBeShown=[];
+   var optionsToBeShown=[],
+   chartToBeShown=[],
    labelsToBeShown=[];
-   currentId = this.props.id;
-     for(var i=0;i<opti.length;i++){
+
+   var currentId = this.props.id;
+   var a=this;
+  
+  
+/*     for(var i=0;i<opti.length;i++){
       if(opti[0]=='Yes')
-      optionsToBeShown.push(<h4 id={this.props.id}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}<input type='radio'name={this.props.id}/>{opti[i]}</h4>);
+      optionsToBeShown.push(<h4 id={currentId}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}<input type='radio'name={currentId}/>{opti[i]}</h4>);
         else{
-      optionsToBeShown.push(<h4 id={this.props.id}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}<input type='checkbox'name={this.props.id}/>{opti[i]}</h4>);
+      optionsToBeShown.push(<h4 id={currentId}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}<input type='checkbox'name={currentId}/>{opti[i]}</h4>);
         }
 
      console.log(optionsToBeShown);
 }
-     optionsToBeShown.push(<h4 id={this.props.id}><input type='submit'method= 'post'value = 'Submit'onClick = {this.submitAns.bind(this,this.props.id)} 
-      name={this.props.id}/></h4>);
+     optionsToBeShown.push(<h4 id={currentId}><input type='submit'className = "btn btn-primary"method= 'post'value = 'Submit'onClick = {a.submitAns.bind(a,currentId)} 
+      name={currentId}/></h4>);
 
-
-      dpd.ques.get(this.props.id,function(result){
+*/
+      dpd.ques.get(currentId,function(result){
+      var temp = result;
       if(opti[0]=='Yes'){
+        for(var i=0;i<opti.length;i++)
+          optionsToBeShown.push(<h4 id={currentId}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}&nbsp;<input type='radio'name={currentId}/>&nbsp;{opti[i]}&nbsp;<span className='badge'>{temp.countYN[i]}</span></h4>);
+      
       chartToBeShown.push(<BarChart width={250} height= {100} data = {result.countYN} opt={result.options}/>);
       }
-      else
+      else{
+        for(var i=0;i<opti.length;i++)
+        optionsToBeShown.push(<h4 id={currentId}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}&nbsp;<input type='checkbox'name={currentId}/>&nbsp;{opti[i]}&nbsp;<span className='badge'>{temp.countMultipleChoice[i]}</span></h4>);
+     
       chartToBeShown.push(<BarChart width={250} height= {100} data = {result.countMultipleChoice} opt={result.options}/>);
+      }
+        optionsToBeShown.push(<h4 id={currentId}>&nbsp;&nbsp;<input type='submit'className = "btn btn-primary"method= 'post'value = 'Submit'onClick = {a.submitAns.bind(a,currentId)} 
+      name={currentId}/></h4>);
       });
 
 
@@ -149,15 +139,29 @@ var Question = React.createClass({
 
      
 
-  setTimeout(this.updateState.bind(this,optionsToBeShown,Math.random()), 50);
+  setTimeout(this.updateState.bind(this,optionsToBeShown,chartToBeShown,Math.random()), 20);
 
   },
+  onclick1:function(id){
+    window.location.href = 'showQuestion.html?Qid='+id;
+  },
   render:function(){
-    return(<div  style={divStyle} onClick={this.onclick.bind(this,this.props.options)} id={this.props.id}  >
-      <h3>{this.props.questionTitle}</h3>
-      <form method='put' id = {this.props.id}>{this.state.options}</form>
-      
-     {chartToBeShown}
+    return(<div  style={divStyle} onClick={this.onclick1.bind(this,this.props.id)} id={"a"+this.props.id}  >
+      <div className="panel panel-default">
+      <div className="panel-heading">
+      <h3 className='panel-title'>
+
+      <a data-toggle="collapse" data-parent="#accordion" href={"#"+this.props.id}>{this.props.questionTitle}</a>
+
+      </h3>
+      <form method='put' id = {this.props.id}>
+      <div id={this.props.id} className="panel-collapse collapse in">
+      {this.state.options} {this.state.chart}
+      </div>
+      </form>
+      </div>
+      </div>
+    
     
       
       </div>

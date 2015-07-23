@@ -1,4 +1,4 @@
-var question="";
+     var question="";
      var options = [],optionsToBeSent=[];
      var optionChoice=0;
      var optionButton;
@@ -10,7 +10,7 @@ var question="";
       getInitialState:function()
       {
         return{
-        answerType:0,
+        
         question:'',
         optionAdded:false,
         counter:0,
@@ -19,16 +19,14 @@ var question="";
       },
       
 
-      setAnswerType:function(temp){
-      this.state.answerType=temp;
-      },
       
       setQuestion:function(temp){
-      this.state.question = temp;
+      
       question=temp;
       if(question.charAt(question.length)!='?'){
         question+='?';
       }
+      this.setState({question:question});
       },
      
       addOption:function(){
@@ -104,7 +102,7 @@ var question="";
     
   
       if(optionChoice==2)
-      dpd.ques.post({question:question,optionChoice:optionChoice,options:optionsToBeSent}, function(session, error) {
+      dpd.ques.post({question:question,optionChoice:optionChoice,options:optionsToBeSent,countMultipleChoice:new Array(optionCount+1).join('0').split('').map(parseFloat)}, function(session, error) {
         if (error) {
           alert(error.message);
         } else {
@@ -112,7 +110,7 @@ var question="";
         }
       });
     else if(optionChoice==1)
-       dpd.ques.post({question:question,optionChoice:optionChoice,options:["Yes","No"]}, function(session, error) {
+       dpd.ques.post({question:question,optionChoice:optionChoice,options:["Yes","No"],countYN:[0,0]}, function(session, error) {
         if (error) {
           alert(error.message);
         } else {
@@ -121,8 +119,8 @@ var question="";
       });
       },
       componentDidMount:function(){
-     this.setState({counter:optionCount});
-   console.log(this.state.counter);
+      this.setState({counter:optionCount});
+      console.log(this.state.counter);
       },
       render: function() {
        
@@ -132,7 +130,7 @@ var question="";
        <h3 align = 'center'>
        Enter Your Question:
        </h3>
-        <input type="text" placeholder="Enter Your Question" align='center'id='question' name='ques'/>
+        <input type="text" className="form-control" placeholder="Enter Your Question" align='center'id='question' name='ques'/>
  
       <h3 align = 'center'>
         Select Answer Type:
@@ -153,7 +151,7 @@ var question="";
        
         </label>
         <label>
-     <input type= 'radio' name='opt' value="3" onClick={this.setAnswerType(3)} />
+     <input type= 'radio' name='opt' value="3"  />
       
     <span>
         Single
@@ -168,7 +166,7 @@ var question="";
 
     
        <br/>
-        <input type = 'Submit' value = 'Submit'  onClick={this.submitForm} />
+        <input type = 'Submit' value = 'Submit'  className="btn btn-primary" onClick={this.submitForm} />
         <br/>
 
        </form>
@@ -182,7 +180,7 @@ var question="";
   
     render:function(){
       return(<div>
-      <input type ='text'  id={this.props.counter}/>
+      <input type ='text' className="form-control" id={this.props.counter}/>
 
       </div>
       );

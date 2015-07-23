@@ -5,26 +5,26 @@ var socket  = io();
 var Component  = React.createClass({
 getInitialState:function(){
 return({id:id,question : '',options:[],optionCountAns:[]})
-	},
+  },
 
 componentWillMount:function(){
-	var a  = this;
+  var a  = this;
 dpd.ques.get(id,function(result){
-		if(result.optionChoice=='1')
-	a.setState({question:result.question,options:result.options,optionCountAns:result.countYN});
-	else
-	a.setState({question:result.question,options:result.options,optionCountAns:result.countMultipleChoice});
-	});
+    if(result.optionChoice=='1')
+  a.setState({question:result.question,options:result.options,optionCountAns:result.countYN});
+  else
+  a.setState({question:result.question,options:result.options,optionCountAns:result.countMultipleChoice});
+  });
 },
 updateState:function(){
-	var a  = this;
-		
+  var a  = this;
+    
 dpd.ques.get(id,function(result){
-		if(result.optionChoice=='1')
-	a.setState({question:result.question,options:result.options,optionCountAns:result.countYN});
-	else
-	a.setState({question:result.question,options:result.options,optionCountAns:result.countMultipleChoice});
-	});
+    if(result.optionChoice=='1')
+  a.setState({question:result.question,options:result.options,optionCountAns:result.countYN});
+  else
+  a.setState({question:result.question,options:result.options,optionCountAns:result.countMultipleChoice});
+  });
 
 },
 componentDidMount:function(){
@@ -33,7 +33,7 @@ dpd.on('message',this.updateState);
 submitAns:function(){
 
 
-	var optionAns=[];
+  var optionAns=[];
   var op1=document.getElementsByName(id);
 
   dpd.ques.get(id, function (result) {
@@ -69,28 +69,28 @@ submitAns:function(){
  
 },
 render:function(){
-	var i =0;
-	var a1=this.state.optionCountAns;
-	if(this.state.options[0]=='Yes'){
-	var op = this.state.options.map(function(option){
-		
+  var i =0;
+  var a1=this.state.optionCountAns;
+  if(this.state.options[0]=='Yes'){
+  var op = this.state.options.map(function(option){
+    
 return <h3 id={id}>&nbsp;{'('+String.fromCharCode(65+i)+')'}&nbsp;<input type='radio'name={id}/>&nbsp;{option}&nbsp;<span className = 'badge'>{a1[i++]}</span></h3>
 
 
-	});
-	 
-	 op.push(<form id={'a'+id} action='index.html' method ='put'>&nbsp;&nbsp;<input type='submit'className = "btn btn-primary"value = 'Submit'onClick = {this.submitAns} 
+  });
+   
+   op.push(<form id={'a'+id} action='index.html' method ='put'>&nbsp;&nbsp;<input type='submit'className = "btn btn-primary"value = 'Submit'onClick = {this.submitAns} 
       name={id}/><br/><br/></form>);
 
 }else {
 var op = this.state.options.map(function(option){
-		
+    
 return <h3 id={id}>&nbsp;{'('+String.fromCharCode(65+i)+')'}&nbsp;<input type='checkbox'name={id}/>&nbsp;{option}&nbsp;<span className = 'badge'>{a1[i++]}</span></h3>
 
 
-	});
-	 
-	 op.push(<form id={'a'+id} action='index.html' method ='put'>&nbsp;&nbsp;<input type='submit'className = "btn btn-primary"value = 'Submit'onClick = {this.submitAns} 
+  });
+   
+   op.push(<form id={'a'+id} action='index.html' method ='put'>&nbsp;&nbsp;<input type='submit'className = "btn btn-primary"value = 'Submit'onClick = {this.submitAns} 
       name={id}/><br/><br/></form>);
 
 
@@ -104,7 +104,7 @@ return(
 {op}
 <BarChart width = {200} height= {100} data = {this.state.optionCountAns} opt ={this.state.options}/>
 </div>
-	);
+  );
 }
 
 });
