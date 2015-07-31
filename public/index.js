@@ -1,64 +1,94 @@
-var data=[];
-var divStyle = {
-  backgroundColor: '#aaccaa'
-};
 
-var Component = React.createClass({
-  
-  getInitialState:function(){
-  return{ question:[]}
+
+var qno = 1;
+var url = ['8f5dc04c44e2a832','true'];
+var PieChart = ReactD3.PieChart;
+var cookieData = reactCookie.load('qid');
+var qAnsOrNot=false;
+if(cookieData!=undefined){
+if(cookieData.search(url[0])>-1){
+qAnsOrNot = true;
+}else{
+  reactCookie.save('qid','');
+}
+}
+else{
+   reactCookie.save('qid','');
+}
+
+
+
+
+var Component  = React.createClass({
+getInitialState:function(){
+return({qno:1,id:this.props.id,question : '',options:[],optionCountAns:[]})
   },
-  updateState:function(){
-   this.setState({question:data});
-  console.log(this.state.question);
-  },
-  componentWillMount:function(){
-    
-    dpd.ques.get(function(result,err){
-    data = result;
-   
-    });
- 
- 
-    },
-    
-  componentDidMount:function(){
-    setTimeout(this.updateState,150);
-     
-    },
-   
-    render:function(){
-      var q = this.state.question.map(function(question){
-        return <Question questionTitle={question.question} id = {question.id} options ={question.options} optionChoice = {question.optionChoice}/>;
-      });
-      return(<ol>
-      <form action="/index1.html">
-      <input type="submit"  className="btn btn-primary" value="Post a Question"/>
-      </form>
-      <div className="panel-group" id="accordion">
-          {q}
-          </div>
-        </ol>
-        
-      );
-    }
+componentDidMount:function(){
+},
+componentWillMount:function(){
+   url[0] = this.props.id;
+  var a  = this;
+  console.log(this.state.id);
+dpd.ques.get(this.state.id,function(result){
+    if(result.optionChoice=='1')
+  a.setState({question:result.question,options:result.options,optionCountAns:result.countYN});
+  else
+  a.setState({question:result.question,options:result.options,optionCountAns:result.countMultipleChoice});
   });
 
-var Question = React.createClass({
-  getInitialState:function(){
-  return{options:[],chart:[],
-  random:0
-  }
-  },
- 
-  updateState:function(op,ch,ra){
-    this.setState({options:op,chart:ch,random:ra});
-  },
-  submitAns:function(id){
-  var optionAns=[];
-  var op1=document.getElementsByName(id);
+},
+updateState:function(){
+  var a  = this;
+  url[0] = this.props.id;
+    dpd.ques.get(url[0],function(result){
+    if(result.optionChoice=='1')
+  a.setState({question:result.question,options:result.options,optionCountAns:result.countYN});
+  else
+  a.setState({question:result.question,options:result.options,optionCountAns:result.countMultipleChoice});
+  });
 
-  dpd.ques.get(id, function (result) {
+},
+componentDidMount:function(){
+dpd.on('message',this.updateState);
+},
+onClickNext:function(){
+
+var a=this;
+dpd.ques.get(function(result){
+  if(qno>=result.length)
+    qno=0;
+url = [result[qno++].id,'false'];
+cookieData = reactCookie.load('qid');
+ qAnsOrNot=true;
+if(cookieData!=undefined){
+if(cookieData.search(url[0])>-1){
+qAnsOrNot = true;
+}else{
+  reactCookie.save('qid','');
+}
+}
+else{
+  reactCookie.save('qid','');
+}
+
+setTimeout(this.updateState, 100);
+console.log(url[0]);
+dpd.ques.get(url[0],function(result){
+    if(result.optionChoice=='1')
+  a.setState({qno:qno,question:result.question,options:result.options,optionCountAns:result.countYN});
+  else
+  a.setState({qno:qno,question:result.question,options:result.options,optionCountAns:result.countMultipleChoice});
+  });
+});
+},
+submitAns:function(){
+
+ window.location.href = 'presentQuestion.html?'+this.state.id;
+
+  var optionAns=[];
+  var op1=document.getElementsByName(url[0]);
+
+  dpd.ques.get(url[0], function (result) {
   
     if(result.optionChoice==1){
   for(var i=0;i<op1.length-1;i++){
@@ -69,7 +99,7 @@ var Question = React.createClass({
   }
   }
 
-  dpd.ques.put(id, {countYN:optionAns}, function(result, err) {
+  dpd.ques.put(url[0], {countYN:optionAns}, function(result, err) {
   if(err) return console.log(err);
  
   });
@@ -83,182 +113,114 @@ var Question = React.createClass({
   }
   }
 
-  dpd.ques.put(id, {countMultipleChoice:optionAns}, function(result, err) {
+  dpd.ques.put(url[0], {countMultipleChoice:optionAns}, function(result, err) {
   if(err) return console.log(err);
   });
   }
   });
+   
+   reactCookie.save('qid',cookieData+url[0]);
+ 
+},
+render:function(){
+console.log(url[0]);
+  var i =0;
+  var a1=this.state.optionCountAns;
+  if(!(url[1]==='true')&&qAnsOrNot==false){
+  if(this.state.options[0]=='Yes'){
+  var op = this.state.options.map(function(option){
+    
+return <h5 id={url[0]}>&nbsp;{'('+String.fromCharCode(65+i)+')'}&nbsp;<input type='radio'name={url[0]}/>&nbsp;{option}&nbsp;
+<span className = 'badge'>{a1[i++]}</span></h5>
 
- // setTimeout(this.updateState.bind(this,optionsToBeShown,chartToBeShown,Math.random()), 100);
-  setTimeout(function () { window.location.reload(); }, 50);
-  },
-  
-  onclick:function(opti){
 
-   var optionsToBeShown=[],
-   chartToBeShown=[],
-   labelsToBeShown=[];
+  });
+   
+   op.push(<form id={'a'+url[0]} method ='put'>&nbsp;&nbsp;<input type='button'className = "btn btn-primary"value = 'Submit'onClick = {this.submitAns} 
+      name={url[0]}/><br/><br/></form>);
 
-   var currentId = this.props.id;
-   var a=this;
-  
-  
-/*     for(var i=0;i<opti.length;i++){
-      if(opti[0]=='Yes')
-      optionsToBeShown.push(<h4 id={currentId}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}<input type='radio'name={currentId}/>{opti[i]}</h4>);
-        else{
-      optionsToBeShown.push(<h4 id={currentId}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}<input type='checkbox'name={currentId}/>{opti[i]}</h4>);
-        }
+}else {
+var op = this.state.options.map(function(option){
+    
+return <h5 id={url[0]}>&nbsp;{'('+String.fromCharCode(65+i)+')'}&nbsp;<input type='checkbox'name={url[0]}/>&nbsp;{option}&nbsp;<span className = 'badge'>{a1[i++]}</span></h5>
 
-     console.log(optionsToBeShown);
+
+  });
+   
+   op.push(<form id={'a'+url[0]}  method ='put'>&nbsp;&nbsp;<input type='button'className = "btn btn-primary"value = 'Submit'onClick = {this.submitAns} 
+      name={url[0]}/><br/><br/></form>);
+ }
 }
-     optionsToBeShown.push(<h4 id={currentId}><input type='submit'className = "btn btn-primary"method= 'post'value = 'Submit'onClick = {a.submitAns.bind(a,currentId)} 
-      name={currentId}/></h4>);
+else{
+var data=[];
+var values='';
+ var op = this.state.options.map(function(option){
+ 
+return <h5 id={url[0]}>&nbsp;{'('+String.fromCharCode(65+i)+')'}&nbsp;{option}&nbsp;<span className = 'badge'>{a1[i++]}</span>
+</h5>
+});
+i=0;
 
-*/
-      dpd.ques.get(currentId,function(result){
-      var temp = result;
-      if(opti[0]=='Yes'){
-        for(var i=0;i<opti.length;i++)
-          optionsToBeShown.push(<h4 id={currentId}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}&nbsp;<input type='radio'name={currentId}/>&nbsp;{opti[i]}&nbsp;<span className='badge'>{temp.countYN[i]}</span></h4>);
-      
-      chartToBeShown.push(<BarChart width={250} height= {100} data = {result.countYN} opt={result.options}/>);
-      }
-      else{
-        for(var i=0;i<opti.length;i++)
-        optionsToBeShown.push(<h4 id={currentId}>&nbsp;{'('+String.fromCharCode(65+optionsToBeShown.length)+')'}&nbsp;<input type='checkbox'name={currentId}/>&nbsp;{opti[i]}&nbsp;<span className='badge'>{temp.countMultipleChoice[i]}</span></h4>);
-     
-      chartToBeShown.push(<BarChart width={250} height= {100} data = {result.countMultipleChoice} opt={result.options}/>);
-      }
-        optionsToBeShown.push(<h4 id={currentId}>&nbsp;&nbsp;<input type='submit'className = "btn btn-primary"method= 'post'value = 'Submit'onClick = {a.submitAns.bind(a,currentId)} 
-      name={currentId}/></h4>);
-      });
+var chart = '';
 
 
-     
 
-     
+var data= this.state.options.map(function(option){
 
-  setTimeout(this.updateState.bind(this,optionsToBeShown,chartToBeShown,Math.random()), 20);
+return {x:option,y:a1[i++]};
 
-  },
-  onclick1:function(id){
-    window.location.href = 'showQuestion.html?Qid='+id;
-  },
-  render:function(){
-    return(<div  style={divStyle} onClick={this.onclick1.bind(this,this.props.id)} id={"a"+this.props.id}  >
-      <div className="panel panel-default">
-      <div className="panel-heading">
-      <h3 className='panel-title'>
-
-      <a data-toggle="collapse" data-parent="#accordion" href={"#"+this.props.id}>{this.props.questionTitle}</a>
-
-      </h3>
-      <form method='put' id = {this.props.id}>
-      <div id={this.props.id} className="panel-collapse collapse in">
-      {this.state.options} {this.state.chart}
-      </div>
-      </form>
-      </div>
-      </div>
-    
-    
-      
-      </div>
-    );
-  }
 });
 
-var Chart = React.createClass({
-  render:function(){
-    return(<svg width={this.props.width} height = {this.props.height}>{this.props.children}</svg>);
-  }
-});
+data = {values:data}
+console.log(data);
 
-var Bar = React.createClass({
-  getDefaultProps:function(){
-    return{
-      width:0,
-      height:0,
-      offset:0
-    }
-  },
-  render:function(){
-    return(
-<rect fill={this.props.color}
-width={this.props.width}
-height={this.props.height}
-x ={this.props.offset}
-y= {this.props.availableHeight-this.props.height}/>
-      );
-  }
-});
-var Text = React.createClass({
-  render:function(){
-    return(
-<text 
+var sort = null; // d3.ascending, d3.descending, func(a,b) { return a - b; }, etc...
 
-x={this.props.offset}
-y= {this.props.availableHeight-this.props.height}
+var chart = <PieChart
+                data={data}
+                width={500}
+                height={500}
+                margin={{top: 10, bottom: 150, left: 150, right: 150}}
+                sort={sort} />
+//var chart = <BarChart width = {200} height= {100} data = {this.state.optionCountAns} opt ={this.state.options}/>
 
->
-{this.props.option}
-</text>
-      );
-  }
-});
-var DataSeries = React.createClass({
-  getDefaultProps: function() {
-    return {
-      title:'',
-      data: []
-    }
-  },
+}
+return(
+<div>
+<h4>
+{this.state.question}
+</h4>
+{op}
+<div>
+{chart}
+</div>
+</div>
+  );
+}
 
-  render: function() {
-    var props = this.props;
-
-    var yScale = d3.scale.linear()
-      .domain([0, d3.max(this.props.data)])
-      .range([0, this.props.height]);
-
-    var xScale = d3.scale.ordinal()
-      .domain(d3.range(this.props.data.length))
-      .rangeRoundBands([0, this.props.width], 0.05);
-
-    var bars = _.map(this.props.data, function(point, i) {
-      return (
-        <Bar height={yScale(point)} width={xScale.rangeBand()} offset={xScale(i)} availableHeight={props.height} color={props.color} key={i} />
-             )
-    });
-    var text = _.map(this.props.opt,function(point,i){
-      return(<Text height='4'  offset = {xScale(i)+xScale.rangeBand()/2.6} availableHeight={props.height} option = {'('+String.fromCharCode(65+i)+')'} color='#ffffff'/>
-        
-        )
-    });
-
-    return (
-      <g id='a'>
-      {bars}
-      {text}
-      </g>
-    );
-  }
 });
 
 
-var BarChart = React.createClass({
-  render: function() {
-    return (
-      <Chart width={this.props.width} height={this.props.height}>
-        <DataSeries opt={this.props.opt} data={this.props.data} width={this.props.width} height={this.props.height}  color="teal" />
-      
-      </Chart>
-    );
-  }
-});
 
 
-React.render(<Component/>,document.getElementById("abc"));
 
+
+var SectionComponent = React.createClass({
+render:function(){
+return(<div>
+  <section>
+<Component id = {'8f5dc04c44e2a832'}/>
+  </section>
+ 
   
+  </div>
+  );
+}
+}
+
+
+
+
+  );
+
+
