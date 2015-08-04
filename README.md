@@ -10,6 +10,8 @@ ReactJs-Cookie[Link](https://www.npmjs.com/package/react-cookie)
 
 ReactJs-d3-Component(To draw Graph)[Link](https://github.com/codesuki/react-d3-components)
 
+SlidesJS[Link](www.slidesjs.com/)
+
 ## Clone the Project 
 
 $ git clone https://github.com/vishalchandna1/project1
@@ -44,3 +46,26 @@ The macosx installer is deprecated. The recommended way is now npm (`npm install
 
 3. Open up your browser and open up the URL : localhost:2403 or 127.0.0.1:2403
 
+# localhost:2403/dashboard
+
+IT will open up your dashboard that helps to create collections and events.
+
+For more info [Link](http://deployd.com)
+
+# localhost:2403/admin.html
+
+1. This page respresents a list of questions. 
+2. And you can post a question
+
+# localhost:2403/presentQuestion.html?Qid
+
+Qid = Id of the question that is to be presented to the user eg. localhost:2403/presentQuestion.html?f5b91ab886325839
+
+# localhost:2403/presentQuestion.html?Qid?mode
+
+mode respresents two types of mode that is Presenter mode and Guest mode
+
+1. mode = true represent Presenter mode eg. localhost:2403/presentQuestion.html?f5b91ab886325839?true
+2. mode = false represent Guest mode eg. localhost:2403/presentQuestion.html?f5b91ab886325839?false
+					
+By Default : mode =false eg.  localhost:2403/presentQuestion.html?f5b91ab886325839
