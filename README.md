@@ -14,7 +14,7 @@ SlidesJS[Link](www.slidesjs.com/)
 
 ## Clone the Project 
 
-$ git clone https://github.com/vishalchandna1/project1
+	$ git clone https://github.com/vishalchandna1/project1
 
 #How To Run?
 
