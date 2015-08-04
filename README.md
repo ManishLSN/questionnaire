@@ -46,22 +46,24 @@ The macosx installer is deprecated. The recommended way is now npm (`npm install
 
 3. Open up your browser and open up the URL : localhost:2403 or 127.0.0.1:2403
 
-# localhost:2403/dashboard
+## localhost:2403/dashboard
 
-IT will open up your dashboard that helps to create collections and events.
+IT will open up your dashboard that helps to create collections and emit events.
 
 For more info [Link](http://deployd.com)
 
-# localhost:2403/admin.html
+## localhost:2403/admin.html
 
 1. This page respresents a list of questions. 
 2. And you can post a question
 
-# localhost:2403/presentQuestion.html?Qid
+## localhost:2403/presentQuestion.html?Qid
 
-Qid = Id of the question that is to be presented to the user eg. localhost:2403/presentQuestion.html?f5b91ab886325839
+Qid = Id of the question that is to be presented to the user
 
-# localhost:2403/presentQuestion.html?Qid?mode
+eg. localhost:2403/presentQuestion.html?f5b91ab886325839
+
+## localhost:2403/presentQuestion.html?Qid?mode
 
 mode respresents two types of mode that is Presenter mode and Guest mode
 
