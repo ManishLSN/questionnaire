@@ -1,0 +1,26 @@
+{
+  "name": "questionnaire",
+  "version": "1.0.0",
+  "description": "Questionnaire",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/subhojit777/questionnaire.git"
+  },
+  "author": "Subhojit Paul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/subhojit777/questionnaire/issues"
+  },
+  "homepage": "https://github.com/subhojit777/questionnaire#readme",
+  "dependencies": {
+    "babel-preset-react": "^6.5.0",
+    "babelify": "^7.2.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "slides-js": "^0.3.0"
+  }
+}
