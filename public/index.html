@@ -1,110 +1,21 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Question</title>
-	<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/JSXTransformer.js"></script>
-     <script type="text/javascript" src="/dpd.js"></script>
-     <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.3.13/d3.js"></script>
-     <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
-       <script src="graphLibrary\dist\react-d3-components.js"></script>
-      <script type="text/javascript"src="react-cookie\dist\react-cookie.js"></script>
-      <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/slidesjs/3.0/jquery.slides.js"></script>
-<script>
-    $(function(){
-      $("#slides").slidesjs({
-      	navigation: {
-      active: false,
-  
-        // previous button: class="slidesjs-previous slidesjs-navigation"
-        // next button: class="slidesjs-next slidesjs-navigation"
-      effect: "slide"
-       
-    },
-     pagination: {
-      active: false,
-        // [boolean] Create pagination items.
-        // You cannot use your own pagination. Sorry.
-      effect: "slide"
-        // [string] Can be either "slide" or "fade".
-    },
-        width: 940,
-        height: 500
-      });
-
-    });
-   
-  </script>
-     
-</head>
-<body>
- <div id ="abc"class='container'></div>
-
-<script  type="text/jsx" src ='index.js'>
-
-</script>
-<div id = 'slides'>
-<section id='#1'>
-	<h1 class = 'page-header'>Slide #1</h1>
-	<p class = 'jumbotron'>
-		Lorem Ipsum is simply dummy text of the printing and typesetting industry. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-	</p>
-	<div id="#q1"></div>
-  <script type="text/jsx">
-  React.render(<Component id ={'8525e8491600d8a2'}/>,document.getElementById('#q1'));
-  </script>
-</section>
-
-<section id='#2'>
-	<h1 class = 'page-header'>Slide #2</h1>
-	<p class = 'jumbotron'>
-		Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-	</p>
-	<div id="#q2"></div>
-  <script type="text/jsx">
-  React.render(<Component id = {'b1f06ec190cff8fd'}/>,document.getElementById('#q2'));
-  </script>
-</section>
-
-<section id='#3'>
-	<h1 class = 'page-header'>Slide #3</h1>
-	<p class = 'jumbotron'>
-		It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-	</p>
-	<div id="#q3"></div>
-  <script type="text/jsx">
-  React.render(<Component id = {'ac8f09994f1c886f'}/>,document.getElementById('#q3'));
-  </script>
-</section>
-<section id='#4'>
-	<h1 class = 'page-header'>Slide #4</h1>
-	<p class = 'jumbotron'>
-		It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-	</p>
-	<div id="#q4"></div>
-  <script type="text/jsx">
-  React.render(<Component id = {'3279cfa38e7778ef'}/>,document.getElementById('#q4'));
-  </script>
-</section>
-
-<a href="#" class="slidesjs-previous slidesjs-navigation"accesskey="f"></i></a>
-<a href="#" class="slidesjs-next slidesjs-navigation"accesskey="d"></i></a> 
-</div>
-<script>
-$(document).keydown(function(event) {
-        
-        switch (event.keyCode) {
-            case 37: $(".slidesjs-previous").click();
-            case 39: $(".slidesjs-next").click(); 
-        }
-    })
-</script>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick-theme.css"/>
+  </head>
+  <body>
+    <div class="container" id="slides-wrapper"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.5.9/slick.min.js"></script>
+    <script src="libraries/reactjs/react.min.js"></script>
+    <script src="libraries/reactjs/react-dom.min.js"></script>
+    <script src="build/index.js"></script>
+  </body>
 </html>
