@@ -2,14 +2,6 @@
 
 var mountNode = document.getElementById('post-question');
 
-/*var Question = React.createClass({
-  render: function() {
-    return (
-      <textarea className="form-control" name={this.props.questionId} value={this.props.questionText}></textarea>
-    );
-  }
-});*/
-
 var SingleQuestion = React.createClass({
   displayName: 'SingleQuestion',
 
@@ -25,40 +17,38 @@ var SingleQuestion = React.createClass({
 var MultipleQuestion = React.createClass({
   displayName: 'MultipleQuestion',
 
-  // Code taken from todo app example here:
-  // https://facebook.github.io/react/index.html#examples
-  onChange: function (event) {
-    this.setState({
-      text: event.target.value
-    });
-  },
   handleAddMore: function (event) {
     event.preventDefault();
 
-    var nextQuestion = this.state.questions.concat([{
-      id: this.state.questions.length + 1,
-      text: this.state.text
+    var newQuestions = this.state.questions.concat([{
+      id: this.state.id,
+      text: this.refs.questionText.value
     }]);
+    var newId = this.state.id + 1;
+
+    // Reset the question field.
+    this.refs.questionText.value = '';
+
     this.setState({
-      questions: nextQuestion,
-      text: ''
+      id: newId,
+      questions: newQuestions
     });
   },
   getInitialState: function () {
     return {
-      questions: [],
-      text: ''
+      id: 1,
+      questions: []
     };
   },
   componentDidMount: function () {
     var self = this;
 
+    // Delete question and set new state.
     $(document).on('click', '.remove-question', function () {
-      var id = $(this).prev().attr('id').split('-');
+      var $id = $(this).attr('data-attr');
       var newQuestions = self.state.questions.filter(function (question, index, questions) {
-        return question.id != id[1];
+        return question.id != $id;
       });
-      console.log(newQuestions);
 
       self.setState({
         questions: newQuestions
@@ -66,18 +56,18 @@ var MultipleQuestion = React.createClass({
     });
   },
   render: function () {
-    var createQuestion = function (question, index) {
+    var createItem = function (question) {
       return React.createElement(
         'div',
-        { className: 'question', key: Date.now() },
+        { key: question.id },
         React.createElement(
           'span',
-          { id: "question-" + question.id },
+          null,
           question.text
         ),
         React.createElement(
           'span',
-          { className: 'remove-question' },
+          { 'data-attr': question.id, className: 'remove-question' },
           'Remove'
         )
       );
@@ -86,14 +76,14 @@ var MultipleQuestion = React.createClass({
     return React.createElement(
       'div',
       { className: 'multiple-question-wrapper' },
-      this.state.questions.map(createQuestion),
+      this.state.questions.map(createItem),
       React.createElement(
         'form',
         { onSubmit: this.handleAddMore },
-        React.createElement('input', { onChange: this.onChange, value: this.state.text }),
+        React.createElement('textarea', { className: 'form-control', ref: 'questionText' }),
         React.createElement(
           'button',
-          null,
+          { className: 'btn btn-default' },
           'Add more'
         )
       )
