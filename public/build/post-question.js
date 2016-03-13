@@ -8,7 +8,7 @@ var SingleQuestion = React.createClass({
   render: function () {
     return React.createElement(
       'div',
-      { className: 'single-question-wrapper' },
+      { className: 'single-question-wrapper hidden' },
       React.createElement('textarea', { className: 'form-control', name: 'single-question' })
     );
   }
@@ -75,7 +75,7 @@ var MultipleQuestion = React.createClass({
 
     return React.createElement(
       'div',
-      { className: 'multiple-question-wrapper' },
+      { className: 'multiple-question-wrapper hidden' },
       this.state.questions.map(createItem),
       React.createElement(
         'form',
@@ -94,6 +94,24 @@ var MultipleQuestion = React.createClass({
 var QuestionForm = React.createClass({
   displayName: 'QuestionForm',
 
+  componentDidMount: function () {
+    // Toggle single/multiple question visibility as per user's selection.
+    $('[name=question-type-option]').change(function () {
+      switch ($(this).val()) {
+        case 'single':
+          $('.single-question-wrapper').removeClass('hidden');
+          $('.multiple-question-wrapper').addClass('hidden');
+
+          break;
+
+        case 'multiple':
+          $('.multiple-question-wrapper').removeClass('hidden');
+          $('.single-question-wrapper').addClass('hidden');
+
+          break;
+      }
+    });
+  },
   render: function () {
     return React.createElement(
       'div',
@@ -122,7 +140,7 @@ var QuestionForm = React.createClass({
           React.createElement(
             'label',
             null,
-            React.createElement('input', { type: 'radio', name: 'question-type', value: 'single' }),
+            React.createElement('input', { type: 'radio', name: 'question-type-option', value: 'single' }),
             ' Single'
           )
         ),
@@ -132,7 +150,7 @@ var QuestionForm = React.createClass({
           React.createElement(
             'label',
             null,
-            React.createElement('input', { type: 'radio', name: 'question-type', value: 'multiple' }),
+            React.createElement('input', { type: 'radio', name: 'question-type-option', value: 'multiple' }),
             ' Multiple'
           )
         )

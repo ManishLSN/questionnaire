@@ -5,7 +5,7 @@ var mountNode = document.getElementById('post-question');
 var SingleQuestion = React.createClass({
   render: function() {
     return (
-      <div className="single-question-wrapper">
+      <div className="single-question-wrapper hidden">
         <textarea className="form-control" name="single-question"></textarea>
       </div>
     );
@@ -62,7 +62,7 @@ var MultipleQuestion = React.createClass({
     }
 
     return (
-      <div className="multiple-question-wrapper">
+      <div className="multiple-question-wrapper hidden">
         {this.state.questions.map(createItem)}
         <form onSubmit={this.handleAddMore}>
           <textarea className="form-control" ref="questionText"></textarea>
@@ -74,6 +74,24 @@ var MultipleQuestion = React.createClass({
 });
 
 var QuestionForm = React.createClass({
+  componentDidMount: function() {
+    // Toggle single/multiple question visibility as per user's selection.
+    $('[name=question-type-option]').change(function() {
+      switch ($(this).val()) {
+        case 'single':
+          $('.single-question-wrapper').removeClass('hidden');
+          $('.multiple-question-wrapper').addClass('hidden');
+
+          break;
+
+        case 'multiple':
+          $('.multiple-question-wrapper').removeClass('hidden');
+          $('.single-question-wrapper').addClass('hidden');
+
+          break;
+      }
+    });
+  },
   render: function() {
     return (
       <div className="question-form-wrapper">
@@ -85,12 +103,12 @@ var QuestionForm = React.createClass({
           <h4>Question type:</h4>
           <div className="radio">
             <label>
-              <input type="radio" name="question-type" value="single" /> Single
+              <input type="radio" name="question-type-option" value="single" /> Single
             </label>
           </div>
           <div className="radio">
             <label>
-              <input type="radio" name="question-type" value="multiple" /> Multiple
+              <input type="radio" name="question-type-option" value="multiple" /> Multiple
             </label>
           </div>
         </div>
