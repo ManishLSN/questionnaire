@@ -1,0 +1,21 @@
+{
+	"type": "Collection",
+	"properties": {
+		"questionId": {
+			"name": "questionId",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "questionId",
+			"order": 0
+		},
+		"options": {
+			"name": "options",
+			"type": "array",
+			"typeLabel": "array",
+			"required": true,
+			"id": "options",
+			"order": 1
+		}
+	}
+}

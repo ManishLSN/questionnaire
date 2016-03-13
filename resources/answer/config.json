@@ -1,21 +1,29 @@
 {
 	"type": "Collection",
 	"properties": {
-		"question": {
-			"name": "question",
+		"questionId": {
+			"name": "questionId",
 			"type": "string",
 			"typeLabel": "string",
 			"required": true,
-			"id": "question",
+			"id": "questionId",
 			"order": 0
 		},
-		"type": {
-			"name": "type",
+		"answer": {
+			"name": "answer",
 			"type": "string",
 			"typeLabel": "string",
 			"required": true,
-			"id": "type",
+			"id": "answer",
 			"order": 1
+		},
+		"userId": {
+			"name": "userId",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "userId",
+			"order": 2
 		},
 		"time": {
 			"name": "time",
@@ -23,7 +31,7 @@
 			"typeLabel": "number",
 			"required": true,
 			"id": "time",
-			"order": 2
+			"order": 3
 		}
 	}
 }
