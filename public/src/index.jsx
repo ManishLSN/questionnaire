@@ -3,6 +3,22 @@
 var mountNode = document.getElementById('slides-wrapper');
 
 var Slides = React.createClass({
+  getInitialState: function() {
+    return {
+      questions: {}
+    };
+  },
+  componentWillMount: function() {
+    dpd.ques.get(function(result, err) {
+      if (err) {
+        return console.log(err);
+      }
+
+      this.setState({
+        questions: result
+      });
+    }.bind(this));
+  },
   componentDidMount: function() {
     $('.slides').slick({
       prevArrow: '<a>Previous</a>',
@@ -10,13 +26,10 @@ var Slides = React.createClass({
     });
   },
   render: function() {
+    console.log(this.state.questions);
     return (
       <div className="slides">
-        <div>first content</div>
-        <div>second content</div>
-        <div>third content</div>
-        <div>fourth content</div>
-        <div>fifth content</div>
+        <div>hello</div>
       </div>
     );
   }
