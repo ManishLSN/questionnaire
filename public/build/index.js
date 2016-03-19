@@ -7,13 +7,15 @@ var Slides = React.createClass({
 
   getInitialState: function () {
     return {
-      questions: {}
+      questions: []
     };
   },
   componentWillMount: function () {
     dpd.ques.get(function (result, err) {
       if (err) {
-        return console.log(err);
+        this.setState({
+          error: err
+        });
       }
 
       this.setState({
@@ -28,16 +30,22 @@ var Slides = React.createClass({
     });
   },
   render: function () {
-    console.log(this.state.questions);
-    return React.createElement(
-      'div',
-      { className: 'slides' },
-      React.createElement(
+    if (this.state.error === undefined) {
+      return React.createElement(
         'div',
-        null,
-        'hello'
-      )
-    );
+        { className: 'slides' },
+        this.state.questions.map(function (currentValue, index, array) {
+          return React.createElement(
+            'div',
+            { key: currentValue.id },
+            currentValue.question
+          );
+        })
+      );
+    } else {
+      console.log(this.state.error);
+      return false;
+    }
   }
 });
 

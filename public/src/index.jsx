@@ -5,13 +5,15 @@ var mountNode = document.getElementById('slides-wrapper');
 var Slides = React.createClass({
   getInitialState: function() {
     return {
-      questions: {}
+      questions: []
     };
   },
   componentWillMount: function() {
     dpd.ques.get(function(result, err) {
       if (err) {
-        return console.log(err);
+        this.setState({
+          error: err
+        });
       }
 
       this.setState({
@@ -26,12 +28,19 @@ var Slides = React.createClass({
     });
   },
   render: function() {
-    console.log(this.state.questions);
-    return (
-      <div className="slides">
-        <div>hello</div>
-      </div>
-    );
+    if (this.state.error === undefined) {
+      return (
+        <div className="slides">
+          {this.state.questions.map(function(currentValue, index, array) {
+            return <div key={currentValue.id}>{currentValue.question}</div>;
+          })}
+        </div>
+      );
+    }
+    else {
+      console.log(this.state.error);
+      return false;
+    }
   }
 });
 
