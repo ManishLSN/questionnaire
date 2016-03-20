@@ -2,6 +2,36 @@
 
 var mountNode = document.getElementById('slides-wrapper');
 
+var Answers = React.createClass({
+  getInitialState: function() {
+    return {
+      answers: []
+    };
+  },
+  componentWillMount: function() {
+    var query = {
+      'questionId': this.props.questionId
+    };
+
+    dpd.answer.get(query, function(result) {
+      this.setState({
+        answers: result
+      });
+    }.bind(this));
+  },
+  render: function() {
+    return (
+      <div className="answers-wrapper">
+        {this.state.answers.map(function(currentValue, index, array) {
+          return (
+            <div key={currentValue.id}>{currentValue.answer}</div>
+          );
+        })}
+      </div>
+    );
+  }
+});
+
 var Slides = React.createClass({
   getInitialState: function() {
     return {
@@ -32,7 +62,12 @@ var Slides = React.createClass({
       return (
         <div className="slides">
           {this.state.questions.map(function(currentValue, index, array) {
-            return <div key={currentValue.id}>{currentValue.question}</div>;
+            return (
+              <div key={currentValue.id}>
+                <div className="question">{currentValue.question}</div>
+                <Answers questionId={currentValue.id} />
+              </div>
+            );
           })}
         </div>
       );

@@ -2,6 +2,40 @@
 
 var mountNode = document.getElementById('slides-wrapper');
 
+var Answers = React.createClass({
+  displayName: 'Answers',
+
+  getInitialState: function () {
+    return {
+      answers: []
+    };
+  },
+  componentWillMount: function () {
+    var query = {
+      'questionId': this.props.questionId
+    };
+
+    dpd.answer.get(query, function (result) {
+      this.setState({
+        answers: result
+      });
+    }.bind(this));
+  },
+  render: function () {
+    return React.createElement(
+      'div',
+      { className: 'answers-wrapper' },
+      this.state.answers.map(function (currentValue, index, array) {
+        return React.createElement(
+          'div',
+          { key: currentValue.id },
+          currentValue.answer
+        );
+      })
+    );
+  }
+});
+
 var Slides = React.createClass({
   displayName: 'Slides',
 
@@ -38,7 +72,12 @@ var Slides = React.createClass({
           return React.createElement(
             'div',
             { key: currentValue.id },
-            currentValue.question
+            React.createElement(
+              'div',
+              { className: 'question' },
+              currentValue.question
+            ),
+            React.createElement(Answers, { questionId: currentValue.id })
           );
         })
       );
