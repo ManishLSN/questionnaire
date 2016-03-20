@@ -21,7 +21,7 @@ var Slides = React.createClass({
       });
     }.bind(this));
   },
-  componentDidMount: function() {
+  componentDidUpdate: function() {
     $('.slides').slick({
       prevArrow: '<a>Previous</a>',
       nextArrow: '<a>Next</a>'
