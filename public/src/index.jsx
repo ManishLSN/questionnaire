@@ -67,12 +67,6 @@ var Slides = React.createClass({
       });
     }.bind(this));
   },
-  componentDidUpdate: function() {
-    $('.slides').slick({
-      prevArrow: '<a>Previous</a>',
-      nextArrow: '<a>Next</a>'
-    });
-  },
   render: function() {
     if (this.state.error === undefined) {
       return (
