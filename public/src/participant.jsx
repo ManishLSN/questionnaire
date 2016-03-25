@@ -6,6 +6,9 @@ var mountNode = document.getElementById('participant-form');
 var uri = new URI(window.location.href);
 var questionId = uri.search(true).question;
 
+/**
+ * Participant form component.
+ */
 var ParticipantForm = React.createClass({
   handlePostAnswer: function(event) {
     event.preventDefault();
@@ -51,12 +54,18 @@ var ParticipantForm = React.createClass({
   },
   render: function() {
     if (this.state.success) {
+      // @TODO May be we can move this to a new component, or a mixin.
       var alert = <div className="alert alert-success alert-dismissible fade in" role="alert">
         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
         <strong>Answer submitted</strong>
       </div>
+
+      // Reset success state.
+      this.setState({
+        success: false
+      });
     }
     else {
       var alert = '';
