@@ -22,8 +22,10 @@ var ParticipantForm = React.createClass({
 
     dpd.answer.post(postData, function (result, err) {
       if (err) return console.log(err);
-      console.log(result, result.id);
-    });
+      this.setState({
+        success: true
+      });
+    }.bind(this));
   },
   handleOptionChange: function (event) {
     // WTF!!
@@ -42,39 +44,71 @@ var ParticipantForm = React.createClass({
   },
   getInitialState: function () {
     return {
-      selectedOption: ''
+      selectedOption: '',
+      success: false
     };
   },
+  shouldComponentUpdate: function (nextProps, nextState) {
+    return nextState.success === true;
+  },
   render: function () {
-    return React.createElement(
-      'form',
-      { onSubmit: this.handlePostAnswer },
-      React.createElement(
-        'h3',
-        { className: 'question' },
-        this.props.question.question
-      ),
-      React.createElement(
+    if (this.state.success) {
+      var alert = React.createElement(
         'div',
-        { className: 'options-wrapper well', onClick: this.handleOptionChange },
-        this.props.questionOptions.map(function (currentValue, index, array) {
-          return React.createElement(
-            'div',
-            { className: 'radio' },
-            React.createElement(
-              'label',
-              null,
-              React.createElement('input', { type: 'radio', name: 'options', value: currentValue }),
-              ' ',
-              currentValue
-            )
-          );
-        })
-      ),
+        { className: 'alert alert-success alert-dismissible fade in', role: 'alert' },
+        React.createElement(
+          'button',
+          { type: 'button', className: 'close', 'data-dismiss': 'alert', 'aria-label': 'Close' },
+          React.createElement(
+            'span',
+            { 'aria-hidden': 'true' },
+            '×'
+          )
+        ),
+        React.createElement(
+          'strong',
+          null,
+          'Answer submitted'
+        )
+      );
+    } else {
+      var alert = '';
+    }
+
+    return React.createElement(
+      'div',
+      { className: 'form-wrapper' },
+      alert,
       React.createElement(
-        'button',
-        { type: 'submit', className: 'btn btn-primary' },
-        'Submit'
+        'form',
+        { onSubmit: this.handlePostAnswer },
+        React.createElement(
+          'h3',
+          { className: 'question' },
+          this.props.question.question
+        ),
+        React.createElement(
+          'div',
+          { className: 'options-wrapper well', onClick: this.handleOptionChange },
+          this.props.questionOptions.map(function (currentValue, index, array) {
+            return React.createElement(
+              'div',
+              { className: 'radio' },
+              React.createElement(
+                'label',
+                null,
+                React.createElement('input', { type: 'radio', name: 'options', value: currentValue }),
+                ' ',
+                currentValue
+              )
+            );
+          })
+        ),
+        React.createElement(
+          'button',
+          { type: 'submit', className: 'btn btn-primary' },
+          'Submit'
+        )
       )
     );
   }
