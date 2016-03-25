@@ -14,21 +14,15 @@ var Answers = React.createClass({
       tempCount[answer] = tempCount[answer] ? tempCount[answer] + 1 : 1;
     }
 
-    // Create a data structure suitable to D3.js graph rendering.
+    // Create a data structure suitable for graph rendering.
     for (var i = 0; i < questionOptions.length; i++) {
       // If answer is present for an option, then assign it's frequency.
       // Otherwise, assign 0.
       if (tempCount[questionOptions[i]]) {
-        counts.push({
-          'answer': questionOptions[i],
-          'count': tempCount[questionOptions[i]]
-        });
+        counts.push(tempCount[questionOptions[i]]);
       }
       else {
-        counts.push({
-          'answer': questionOptions[i],
-          'count': 0
-        });
+        counts.push(0);
       }
     }
 
@@ -62,35 +56,30 @@ var Answers = React.createClass({
       });
     }.bind(this));
   },
-  /*componentDidMount: function() {
-    var margin = {top: 20, right: 20, bottom: 30, left: 40},
-      width = 960 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
-
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1);
-
-    var y = d3.scale.linear()
-        .range([height, 0]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(1, "%");
-
-    var svg = d3.select(".answers-wrapper").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  },*/
+  componentDidUpdate: function() {
+    $('#' + this.props.questionId).highcharts({
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Result'
+      },
+      xAxis: {
+        categories: this.state.questionOptions
+      },
+      yAxis: {
+        title: {
+          text: 'Frequency'
+        }
+      },
+      series: [{
+        data: this.state.answersFrequency
+      }]
+    });
+  },
   render: function() {
     return (
-      <div className="answers-wrapper">
+      <div className="answers-wrapper" id={this.props.questionId}>
         {this.state.answers.map(function(currentValue, index, array) {
           return (
             <div key={currentValue.id}>{currentValue.answer}</div>
