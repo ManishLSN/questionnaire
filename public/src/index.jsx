@@ -1,9 +1,21 @@
 'use strict';
 
+var React = require('react');
+var ReactDOM = require('react-dom');
+var Highcharts = require('highcharts');
+
 var mountNode = document.getElementById('slides-wrapper');
 
-var Answers = React.createClass({
-  getAnswersFrequency: function(answers, questionOptions) {
+class Answers extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      answers: [],
+      answersFrequency: [],
+      questionOptions: []
+    };
+  }
+  getAnswersFrequency(answers, questionOptions) {
     // Thanks to http://stackoverflow.com/a/5668029/1233922.
     var tempCount = {};
     var counts = [];
@@ -27,15 +39,8 @@ var Answers = React.createClass({
     }
 
     return counts;
-  },
-  getInitialState: function() {
-    return {
-      answers: [],
-      answersFrequency: [],
-      questionOptions: []
-    };
-  },
-  componentWillMount: function() {
+  }
+  componentWillMount() {
     var query = {
       'questionId': this.props.questionId
     };
@@ -55,9 +60,9 @@ var Answers = React.createClass({
         answersFrequency: this.getAnswersFrequency(this.state.answers, this.state.questionOptions)
       });
     }.bind(this));
-  },
-  componentDidUpdate: function() {
-    $('#' + this.props.questionId).highcharts({
+  }
+  componentDidUpdate() {
+    Highcharts.chart(this.props.questionId, {
       chart: {
         type: 'column'
       },
@@ -76,8 +81,8 @@ var Answers = React.createClass({
         data: this.state.answersFrequency
       }]
     });
-  },
-  render: function() {
+  }
+  render() {
     return (
       <div className="answers-wrapper" id={this.props.questionId}>
         {this.state.answers.map(function(currentValue, index, array) {
@@ -88,15 +93,16 @@ var Answers = React.createClass({
       </div>
     );
   }
-});
+}
 
-var Slides = React.createClass({
-  getInitialState: function() {
-    return {
+class Slides extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       questions: []
     };
-  },
-  componentWillMount: function() {
+  }
+  componentWillMount() {
     dpd.ques.get(function(result, err) {
       if (err) {
         this.setState({
@@ -108,8 +114,8 @@ var Slides = React.createClass({
         questions: result
       });
     }.bind(this));
-  },
-  render: function() {
+  }
+  render() {
     if (this.state.error === undefined) {
       return (
         <div className="slides">
@@ -129,6 +135,6 @@ var Slides = React.createClass({
       return false;
     }
   }
-});
+}
 
 ReactDOM.render(<Slides />, mountNode);
