@@ -1,5 +1,9 @@
 'use strict';
 
+var React = require('react');
+var ReactDOM = require('react-dom');
+var URI = require('urijs');
+
 var mountNode = document.getElementById('participant-form');
 
 // Obtain question id from URL.
@@ -9,8 +13,18 @@ var questionId = uri.search(true).question;
 /**
  * Participant form component.
  */
-var ParticipantForm = React.createClass({
-  handlePostAnswer: function(event) {
+class ParticipantForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedOption: '',
+      success: false
+    };
+
+    this.handlePostAnswer = this.handlePostAnswer.bind(this);
+    this.handleOptionChange = this.handleOptionChange.bind(this);
+  }
+  handlePostAnswer(event) {
     event.preventDefault();
 
     // @TODO Don't hardcode user id.
@@ -27,8 +41,8 @@ var ParticipantForm = React.createClass({
         success: true
       });
     }.bind(this));
-  },
-  handleOptionChange: function(event) {
+  }
+  handleOptionChange(event) {
     // WTF!!
     // @TODO use https://github.com/chenglou/react-radio-group
     if (event.target.type === 'radio') {
@@ -36,36 +50,28 @@ var ParticipantForm = React.createClass({
         selectedOption: event.target.value
       });
     }
-  },
-  getDefaultProps: function() {
-    return {
-      question: {},
-      questionOptions: []
-    };
-  },
-  getInitialState: function() {
-    return {
-      selectedOption: '',
-      success: false
-    };
-  },
-  shouldComponentUpdate: function(nextProps, nextState) {
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    // Update component ONLY IF answer post is successful.
     return nextState.success === true;
-  },
-  render: function() {
+  }
+  componentDidUpdate() {
+    // Reset success state.
     if (this.state.success) {
-      // @TODO May be we can move this to a new component, or a mixin.
+      this.setState({
+        success: false
+      });
+    }
+  }
+  render() {
+    if (this.state.success) {
+      // @TODO May be we can move this to a new component, or a mixin?
       var alert = <div className="alert alert-success alert-dismissible fade in" role="alert">
         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
         <strong>Answer submitted</strong>
       </div>
-
-      // Reset success state.
-      this.setState({
-        success: false
-      });
     }
     else {
       var alert = '';
@@ -93,7 +99,12 @@ var ParticipantForm = React.createClass({
       </div>
     );
   }
-});
+}
+
+ParticipantForm.defaultProps = {
+  question: {},
+  questionOptions: []
+}
 
 // Fetch question info and it's options, finally render the form.
 dpd.ques.get(questionId, function(question, error) {
@@ -105,4 +116,3 @@ dpd.ques.get(questionId, function(question, error) {
     ReactDOM.render(<ParticipantForm question={question} questionOptions={questionOptions[0].options}/>, mountNode);
   });
 });
-
