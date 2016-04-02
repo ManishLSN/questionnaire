@@ -19364,17 +19364,7 @@ class Answers extends React.Component {
     });
   }
   render() {
-    return React.createElement(
-      'div',
-      { className: 'answers-wrapper', id: this.props.questionId },
-      this.state.answers.map(function (currentValue, index, array) {
-        return React.createElement(
-          'div',
-          { key: currentValue.id },
-          currentValue.answer
-        );
-      })
-    );
+    return React.createElement('div', { className: 'answers-wrapper', id: this.props.questionId });
   }
 }
 

@@ -84,13 +84,7 @@ class Answers extends React.Component {
   }
   render() {
     return (
-      <div className="answers-wrapper" id={this.props.questionId}>
-        {this.state.answers.map(function(currentValue, index, array) {
-          return (
-            <div key={currentValue.id}>{currentValue.answer}</div>
-          );
-        })}
-      </div>
+      <div className="answers-wrapper" id={this.props.questionId}></div>
     );
   }
 }
