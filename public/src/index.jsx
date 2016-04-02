@@ -2,18 +2,40 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Highcharts = require('highcharts');
+var ReactHighcharts = require('react-highcharts');
+var URI = require('urijs');
 
 var mountNode = document.getElementById('slides-wrapper');
 
-class Answers extends React.Component {
+// Obtain question id from URL.
+var uri = new URI(window.location.href);
+var questionId = uri.search(true).question;
+
+/**
+ * Question component.
+ *
+ * This is used to render question.
+ */
+class Question extends React.Component {
+  render() {
+    return (
+      <div className="question">{this.props.question.question}</div>
+    );
+  }
+}
+
+/**
+ * Question answer wrapper.
+ *
+ * This will render the question and it's graph.
+ */
+class QuestionAnswer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      answers: [],
-      answersFrequency: [],
-      questionOptions: []
-    };
+      question: {},
+      graphConfig: {}
+    }
   }
   getAnswersFrequency(answers, questionOptions) {
     // Thanks to http://stackoverflow.com/a/5668029/1233922.
@@ -41,94 +63,50 @@ class Answers extends React.Component {
     return counts;
   }
   componentWillMount() {
+    var self = this;
     var query = {
       'questionId': this.props.questionId
     };
 
-    dpd.questionoptions.get(query, function(result) {
-      this.setState({
-        questionOptions: result[0].options
+    // @TODO so many nesting!!!
+    dpd.ques.get(self.props.questionId, function(questionResult) {
+      dpd.questionoptions.get(query, function(questionOptionsResult) {
+        dpd.answer.get(query, function(answersResult) {
+          self.setState({
+            question: questionResult,
+            graphConfig: {
+              chart: {
+                type: 'column'
+              },
+              title: {
+                text: 'Result'
+              },
+              xAxis: {
+                categories: questionOptionsResult[0].options
+              },
+              yAxis: {
+                title: {
+                  text: 'Frequency'
+                }
+              },
+              series: [{
+                data: self.getAnswersFrequency(answersResult, questionOptionsResult[0].options)
+              }]
+            }
+          });
+        });
       });
-    }.bind(this));
-
-    dpd.answer.get(query, function(result) {
-      this.setState({
-        answers: result
-      });
-
-      this.setState({
-        answersFrequency: this.getAnswersFrequency(this.state.answers, this.state.questionOptions)
-      });
-    }.bind(this));
-  }
-  componentDidUpdate() {
-    Highcharts.chart(this.props.questionId, {
-      chart: {
-        type: 'column'
-      },
-      title: {
-        text: 'Result'
-      },
-      xAxis: {
-        categories: this.state.questionOptions
-      },
-      yAxis: {
-        title: {
-          text: 'Frequency'
-        }
-      },
-      series: [{
-        data: this.state.answersFrequency
-      }]
     });
+
   }
   render() {
     return (
-      <div className="answers-wrapper" id={this.props.questionId}></div>
+      <div className="question-answer-wrapper">
+        <Question question={this.state.question} />
+        <ReactHighcharts config={this.state.graphConfig}></ReactHighcharts>
+      </div>
     );
   }
 }
 
-class Slides extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      questions: []
-    };
-  }
-  componentWillMount() {
-    dpd.ques.get(function(result, err) {
-      if (err) {
-        this.setState({
-          error: err
-        });
-      }
-
-      this.setState({
-        questions: result
-      });
-    }.bind(this));
-  }
-  render() {
-    if (this.state.error === undefined) {
-      return (
-        <div className="slides">
-          {this.state.questions.map(function(currentValue, index, array) {
-            return (
-              <div key={currentValue.id}>
-                <div className="question">{currentValue.question}</div>
-                <Answers questionId={currentValue.id} />
-              </div>
-            );
-          })}
-        </div>
-      );
-    }
-    else {
-      console.log(this.state.error);
-      return false;
-    }
-  }
-}
-
-ReactDOM.render(<Slides />, mountNode);
+ReactDOM.render(<QuestionAnswer questionId={questionId} />, mountNode);
