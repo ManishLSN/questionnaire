@@ -31246,8 +31246,10 @@ class NavigateQuestion extends React.Component {
 class QuestionAnswer extends React.Component {
   constructor(props) {
     super(props);
+    this.question = collection.find(props.questions, function (o) {
+      return o.id == props.questionId;
+    }).question;
     this.state = {
-      question: {},
       graphConfig: {}
     };
   }
@@ -31306,9 +31308,6 @@ class QuestionAnswer extends React.Component {
     dpd.questionoptions.get(query, function (questionOptionsResult) {
       dpd.answer.get(query, function (answersResult) {
         self.setState({
-          question: collection.find(self.props.questions, function (o) {
-            return o.id == self.props.questionId;
-          }).question,
           graphConfig: {
             chart: {
               type: 'column'
@@ -31336,7 +31335,7 @@ class QuestionAnswer extends React.Component {
     return React.createElement(
       'div',
       { className: 'question-answer-wrapper' },
-      React.createElement(Question, { question: this.state.question }),
+      React.createElement(Question, { question: this.question }),
       React.createElement(ReactHighcharts, { config: this.state.graphConfig }),
       React.createElement(
         'div',

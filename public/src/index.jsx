@@ -63,8 +63,8 @@ class NavigateQuestion extends React.Component {
 class QuestionAnswer extends React.Component {
   constructor(props) {
     super(props);
+    this.question = collection.find(props.questions, function(o) { return o.id == props.questionId; }).question;
     this.state = {
-      question: {},
       graphConfig: {}
     }
   }
@@ -122,7 +122,6 @@ class QuestionAnswer extends React.Component {
     dpd.questionoptions.get(query, function(questionOptionsResult) {
       dpd.answer.get(query, function(answersResult) {
         self.setState({
-          question: collection.find(self.props.questions, function(o) { return o.id == self.props.questionId; }).question,
           graphConfig: {
             chart: {
               type: 'column'
@@ -149,7 +148,7 @@ class QuestionAnswer extends React.Component {
   render() {
     return (
       <div className="question-answer-wrapper">
-        <Question question={this.state.question} />
+        <Question question={this.question} />
         <ReactHighcharts config={this.state.graphConfig}></ReactHighcharts>
         <div className="navigation-wrapper">
           <NavigateQuestion questionId={this.getPreviousQuestionId(this.props.questions, this.props.questionId)} direction="previous" />
