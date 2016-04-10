@@ -31207,6 +31207,11 @@ class Question extends React.Component {
   }
 }
 
+/**
+ * Navigate question component.
+ *
+ * This renders question navigational links.
+ */
 class NavigateQuestion extends React.Component {
   // Generate href.
   // This is similar to Drupal's url() https://api.drupal.org/api/drupal/includes%21common.inc/function/url/7
@@ -31320,7 +31325,24 @@ class QuestionAnswer extends React.Component {
       return questions[index + 1].id;
     }
   }
-  componentWillMount() {}
+  componentDidMount() {
+    let self = this;
+
+    dpd.answer.on('create', function (answer) {
+      // Only update state if answer submitted for the same question that we are
+      // currently viewing.
+      if (answer.questionId == self.props.questionId) {
+        self.setState({
+          answers: self.state.answers.concat(answer)
+        });
+      }
+    });
+  }
+  componentWillUpdate(nextProps, nextState) {
+    this.graphConfig.series = [{
+      data: this.getAnswersFrequency(nextState.answers, this.props.questionOptions)
+    }];
+  }
   render() {
     return React.createElement(
       'div',
