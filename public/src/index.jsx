@@ -63,10 +63,31 @@ class NavigateQuestion extends React.Component {
 class QuestionAnswer extends React.Component {
   constructor(props) {
     super(props);
+
     this.question = collection.find(props.questions, function(o) { return o.id == props.questionId; }).question;
+    this.graphConfig = {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Result'
+      },
+      xAxis: {
+        categories: props.questionOptions
+      },
+      yAxis: {
+        title: {
+          text: 'Frequency'
+        }
+      },
+      series: [{
+        data: this.getAnswersFrequency(props.answers, props.questionOptions)
+      }]
+    };
+
     this.state = {
-      graphConfig: {}
-    }
+      answers: props.answers
+    };
   }
   getAnswersFrequency(answers, questionOptions) {
     // Thanks to http://stackoverflow.com/a/5668029/1233922.
@@ -114,42 +135,12 @@ class QuestionAnswer extends React.Component {
     }
   }
   componentWillMount() {
-    var self = this;
-    var query = {
-      'questionId': this.props.questionId
-    };
-
-    dpd.questionoptions.get(query, function(questionOptionsResult) {
-      dpd.answer.get(query, function(answersResult) {
-        self.setState({
-          graphConfig: {
-            chart: {
-              type: 'column'
-            },
-            title: {
-              text: 'Result'
-            },
-            xAxis: {
-              categories: questionOptionsResult[0].options
-            },
-            yAxis: {
-              title: {
-                text: 'Frequency'
-              }
-            },
-            series: [{
-              data: self.getAnswersFrequency(answersResult, questionOptionsResult[0].options)
-            }]
-          }
-        });
-      });
-    });
   }
   render() {
     return (
       <div className="question-answer-wrapper">
         <Question question={this.question} />
-        <ReactHighcharts config={this.state.graphConfig}></ReactHighcharts>
+        <ReactHighcharts config={this.graphConfig}></ReactHighcharts>
         <div className="navigation-wrapper">
           <NavigateQuestion questionId={this.getPreviousQuestionId(this.props.questions, this.props.questionId)} direction="previous" />
           <NavigateQuestion questionId={this.getNextQuestionId(this.props.questions, this.props.questionId)} direction="next" />
@@ -171,11 +162,18 @@ dpd.ques.get(function(questionsResult, err) {
 
   // If no question id is passed in URL, render the first question from
   // database (no particular order).
-  if (questionId) {
-    ReactDOM.render(<QuestionAnswer questions={questions} questionId={questionId} />, mountNode);
-  }
-  else {
+  if (questionId === undefined) {
     let question = array.head(questions);
-    ReactDOM.render(<QuestionAnswer questions={questions} questionId={question['id']} />, mountNode);
+    questionId = question['id'];
   }
+
+  let query = {
+    'questionId': questionId
+  };
+
+  dpd.questionoptions.get(query, function(questionOptionsResult) {
+    dpd.answer.get(query, function(answersResult) {
+      ReactDOM.render(<QuestionAnswer questionId={questionId} questions={questions} questionOptions={questionOptionsResult[0].options} answers={answersResult} />, mountNode);
+    });
+  });
 });

@@ -31246,11 +31246,32 @@ class NavigateQuestion extends React.Component {
 class QuestionAnswer extends React.Component {
   constructor(props) {
     super(props);
+
     this.question = collection.find(props.questions, function (o) {
       return o.id == props.questionId;
     }).question;
+    this.graphConfig = {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Result'
+      },
+      xAxis: {
+        categories: props.questionOptions
+      },
+      yAxis: {
+        title: {
+          text: 'Frequency'
+        }
+      },
+      series: [{
+        data: this.getAnswersFrequency(props.answers, props.questionOptions)
+      }]
+    };
+
     this.state = {
-      graphConfig: {}
+      answers: props.answers
     };
   }
   getAnswersFrequency(answers, questionOptions) {
@@ -31299,44 +31320,13 @@ class QuestionAnswer extends React.Component {
       return questions[index + 1].id;
     }
   }
-  componentWillMount() {
-    var self = this;
-    var query = {
-      'questionId': this.props.questionId
-    };
-
-    dpd.questionoptions.get(query, function (questionOptionsResult) {
-      dpd.answer.get(query, function (answersResult) {
-        self.setState({
-          graphConfig: {
-            chart: {
-              type: 'column'
-            },
-            title: {
-              text: 'Result'
-            },
-            xAxis: {
-              categories: questionOptionsResult[0].options
-            },
-            yAxis: {
-              title: {
-                text: 'Frequency'
-              }
-            },
-            series: [{
-              data: self.getAnswersFrequency(answersResult, questionOptionsResult[0].options)
-            }]
-          }
-        });
-      });
-    });
-  }
+  componentWillMount() {}
   render() {
     return React.createElement(
       'div',
       { className: 'question-answer-wrapper' },
       React.createElement(Question, { question: this.question }),
-      React.createElement(ReactHighcharts, { config: this.state.graphConfig }),
+      React.createElement(ReactHighcharts, { config: this.graphConfig }),
       React.createElement(
         'div',
         { className: 'navigation-wrapper' },
@@ -31359,12 +31349,20 @@ dpd.ques.get(function (questionsResult, err) {
 
   // If no question id is passed in URL, render the first question from
   // database (no particular order).
-  if (questionId) {
-    ReactDOM.render(React.createElement(QuestionAnswer, { questions: questions, questionId: questionId }), mountNode);
-  } else {
+  if (questionId === undefined) {
     let question = array.head(questions);
-    ReactDOM.render(React.createElement(QuestionAnswer, { questions: questions, questionId: question['id'] }), mountNode);
+    questionId = question['id'];
   }
+
+  let query = {
+    'questionId': questionId
+  };
+
+  dpd.questionoptions.get(query, function (questionOptionsResult) {
+    dpd.answer.get(query, function (answersResult) {
+      ReactDOM.render(React.createElement(QuestionAnswer, { questionId: questionId, questions: questions, questionOptions: questionOptionsResult[0].options, answers: answersResult }), mountNode);
+    });
+  });
 });
 
 },{"lodash/array":167,"lodash/collection":171,"react":420,"react-dom":290,"react-highcharts":291,"urijs":423}],426:[function(require,module,exports){
