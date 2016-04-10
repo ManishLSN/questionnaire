@@ -31219,27 +31219,38 @@ class NavigateQuestion extends React.Component {
   href(url) {
     return url._parts.protocol + '://' + url._parts.hostname + (url._parts.port ? ':' + url._parts.port : '') + (url._parts.query ? '?' + url._parts.query : '');
   }
-  directionText(direction) {
-    switch (direction) {
-      case 'next':
-        return 'Next';
-        break;
-
-      case 'previous':
-        return 'Previous';
-        break;
-    }
-  }
   render() {
     let url = new URI(window.location.href).query({
       question: this.props.questionId
     });
 
-    return React.createElement(
-      'a',
-      { href: this.href(url) },
-      this.directionText(this.props.direction)
-    );
+    switch (this.props.direction) {
+      case 'previous':
+        return React.createElement(
+          'h1',
+          { className: 'col-md-6 text-left' },
+          React.createElement(
+            'a',
+            { href: this.href(url), title: 'Previous' },
+            React.createElement('span', { className: 'glyphicon glyphicon-arrow-left' })
+          )
+        );
+
+        break;
+
+      case 'next':
+        return React.createElement(
+          'h1',
+          { className: 'col-md-6 text-right' },
+          React.createElement(
+            'a',
+            { href: this.href(url), title: 'Next' },
+            React.createElement('span', { className: 'glyphicon glyphicon-arrow-right' })
+          )
+        );
+
+        break;
+    }
   }
 }
 
@@ -31351,7 +31362,7 @@ class QuestionAnswer extends React.Component {
       React.createElement(ReactHighcharts, { config: this.graphConfig }),
       React.createElement(
         'div',
-        { className: 'navigation-wrapper' },
+        { className: 'navigation-wrapper row' },
         React.createElement(NavigateQuestion, { questionId: this.getPreviousQuestionId(this.props.questions, this.props.questionId), direction: 'previous' }),
         React.createElement(NavigateQuestion, { questionId: this.getNextQuestionId(this.props.questions, this.props.questionId), direction: 'next' })
       )

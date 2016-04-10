@@ -38,25 +38,34 @@ class NavigateQuestion extends React.Component {
   href(url) {
     return url._parts.protocol + '://' + url._parts.hostname + (url._parts.port ? (':' + url._parts.port) : '') + (url._parts.query ? ('?' + (url._parts.query)) : '');
   }
-  directionText(direction) {
-    switch (direction) {
-      case 'next':
-        return 'Next';
-        break;
-
-      case 'previous':
-        return 'Previous';
-        break;
-    }
-  }
   render() {
     let url = new URI(window.location.href).query({
       question: this.props.questionId
     });
 
-    return (
-      <a href={this.href(url)}>{this.directionText(this.props.direction)}</a>
-    );
+    switch (this.props.direction) {
+      case 'previous':
+        return (
+          <h1 className="col-md-6 text-left">
+            <a href={this.href(url)} title="Previous">
+              <span className="glyphicon glyphicon-arrow-left"></span>
+            </a>
+          </h1>
+        );
+
+        break;
+
+      case 'next':
+        return (
+          <h1 className="col-md-6 text-right">
+            <a href={this.href(url)} title="Next">
+              <span className="glyphicon glyphicon-arrow-right"></span>
+            </a>
+          </h1>
+        );
+
+        break;
+    }
   }
 }
 
@@ -162,7 +171,7 @@ class QuestionAnswer extends React.Component {
       <div className="question-answer-wrapper">
         <Question question={this.question} />
         <ReactHighcharts config={this.graphConfig}></ReactHighcharts>
-        <div className="navigation-wrapper">
+        <div className="navigation-wrapper row">
           <NavigateQuestion questionId={this.getPreviousQuestionId(this.props.questions, this.props.questionId)} direction="previous" />
           <NavigateQuestion questionId={this.getNextQuestionId(this.props.questions, this.props.questionId)} direction="next" />
         </div>
