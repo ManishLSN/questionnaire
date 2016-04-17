@@ -32,12 +32,6 @@ class Question extends React.Component {
  * This renders question navigational links.
  */
 class NavigateQuestion extends React.Component {
-  // Generate href.
-  // This is similar to Drupal's url() https://api.drupal.org/api/drupal/includes%21common.inc/function/url/7
-  // @TODO This is 2016 and I am creating href like this?? WTF!!
-  href(url) {
-    return url._parts.protocol + '://' + url._parts.hostname + (url._parts.port ? (':' + url._parts.port) : '') + (url._parts.query ? ('?' + (url._parts.query)) : '');
-  }
   render() {
     let url = new URI(window.location.href).query({
       question: this.props.questionId
@@ -47,7 +41,7 @@ class NavigateQuestion extends React.Component {
       case 'previous':
         return (
           <h1 className="col-md-6 text-left">
-            <a href={this.href(url)} title="Previous">
+            <a href={url.href()} title="Previous">
               <span className="glyphicon glyphicon-arrow-left"></span>
             </a>
           </h1>
@@ -58,7 +52,7 @@ class NavigateQuestion extends React.Component {
       case 'next':
         return (
           <h1 className="col-md-6 text-right">
-            <a href={this.href(url)} title="Next">
+            <a href={url.href()} title="Next">
               <span className="glyphicon glyphicon-arrow-right"></span>
             </a>
           </h1>

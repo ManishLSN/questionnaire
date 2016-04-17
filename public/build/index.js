@@ -31213,12 +31213,6 @@ class Question extends React.Component {
  * This renders question navigational links.
  */
 class NavigateQuestion extends React.Component {
-  // Generate href.
-  // This is similar to Drupal's url() https://api.drupal.org/api/drupal/includes%21common.inc/function/url/7
-  // @TODO This is 2016 and I am creating href like this?? WTF!!
-  href(url) {
-    return url._parts.protocol + '://' + url._parts.hostname + (url._parts.port ? ':' + url._parts.port : '') + (url._parts.query ? '?' + url._parts.query : '');
-  }
   render() {
     let url = new URI(window.location.href).query({
       question: this.props.questionId
@@ -31231,7 +31225,7 @@ class NavigateQuestion extends React.Component {
           { className: 'col-md-6 text-left' },
           React.createElement(
             'a',
-            { href: this.href(url), title: 'Previous' },
+            { href: url.href(), title: 'Previous' },
             React.createElement('span', { className: 'glyphicon glyphicon-arrow-left' })
           )
         );
@@ -31244,7 +31238,7 @@ class NavigateQuestion extends React.Component {
           { className: 'col-md-6 text-right' },
           React.createElement(
             'a',
-            { href: this.href(url), title: 'Next' },
+            { href: url.href(), title: 'Next' },
             React.createElement('span', { className: 'glyphicon glyphicon-arrow-right' })
           )
         );
