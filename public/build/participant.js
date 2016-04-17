@@ -22099,6 +22099,21 @@ var mountNode = document.getElementById('participant-form');
 var uri = new URI(window.location.href);
 var questionId = uri.search(true).question;
 
+// Make sure question and participant slides are in sync.
+// @TODO Ideally this should happen on `ques:get`. Currently there is no such
+// event where we are loading only one question.
+dpd.questionoptions.on('get', function (data) {
+  // If the current participant slide is anything else than the question slide,
+  // then we show the same participant slide as question slide.
+  if (questionId != data.questionId) {
+    let currentUrl = new URI(window.location.href);
+    currentUrl.query({
+      question: data.questionId
+    });
+    window.location.href = currentUrl.href();
+  }
+});
+
 /**
  * Participant form component.
  */
