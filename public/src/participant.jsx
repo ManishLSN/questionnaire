@@ -42,11 +42,10 @@ class ParticipantForm extends React.Component {
   handlePostAnswer(event) {
     event.preventDefault();
 
-    // @TODO Don't hardcode user id.
     var postData = {
       'questionId': this.props.question.id,
       'answer': this.state.selectedOption,
-      'userId': 'fe851c8b5e6a1812',
+      'userId': this.props.userId,
       'time': Date.now()
     };
 
@@ -121,13 +120,46 @@ ParticipantForm.defaultProps = {
   questionOptions: []
 }
 
-// Fetch question info and it's options, finally render the form.
-dpd.ques.get(questionId, function(question, error) {
-  var query = {
-    "questionId": questionId
-  };
+class UserLogout extends React.Component {
+  componentDidMount() {
+    $('.logout').click(function() {
+      dpd.users.logout(function() {
+        window.location.href = 'login.html';
+      });
+    });
+  }
+  render() {
+    return (
+      <div className="text-right">
+        <button type="button" className="btn btn-success logout">Logout</button>
+      </div>
+    );
+  }
+}
 
-  dpd.questionoptions.get(query, function(questionOptions, error) {
-    ReactDOM.render(<ParticipantForm question={question} questionOptions={questionOptions[0].options}/>, mountNode);
-  });
+// If user is logged in, show them options.
+// Otherwise, ask them to login first.
+dpd.users.me(function(user) {
+  if (user) {
+    // Fetch question info and it's options, finally render the form.
+    dpd.ques.get(questionId, function(question, error) {
+      var query = {
+        "questionId": questionId
+      };
+
+      dpd.questionoptions.get(query, function(questionOptions, error) {
+        ReactDOM.render(
+          <div>
+            <UserLogout />
+            <ParticipantForm question={question} questionOptions={questionOptions[0].options} userId={user.id} />
+          </div>, mountNode);
+      });
+    });
+  }
+  else {
+    ReactDOM.render(
+      <p className="lead">
+        Please <a href="login.html">login</a> before participating
+      </p>, mountNode);
+  }
 });
