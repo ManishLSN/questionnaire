@@ -108,7 +108,7 @@ class ParticipantForm extends React.Component {
               );
             })}
           </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="submit" className={this.state.success ? "btn btn-primary disabled" : "btn btn-primary"}>Submit</button>
         </form>
       </div>
     );

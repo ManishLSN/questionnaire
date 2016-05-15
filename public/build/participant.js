@@ -22377,7 +22377,7 @@ var ParticipantForm = function (_React$Component) {
           ),
           React.createElement(
             'button',
-            { type: 'submit', className: 'btn btn-primary' },
+            { type: 'submit', className: this.state.success ? "btn btn-primary disabled" : "btn btn-primary" },
             'Submit'
           )
         )
