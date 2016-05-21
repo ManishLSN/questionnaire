@@ -21,7 +21,7 @@ var questionId = uri.search(true).question;
 class Question extends React.Component {
   render() {
     return (
-      <div className="question">{this.props.question.question}</div>
+      <h4 className="well well-lg question">{this.props.question.question}</h4>
     );
   }
 }
@@ -40,7 +40,7 @@ class NavigateQuestion extends React.Component {
     switch (this.props.direction) {
       case 'previous':
         return (
-          <h1 className="col-md-6 text-left">
+          <h1 className="col-xs-6 text-left">
             <a href={url.href()} title="Previous">
               <span className="glyphicon glyphicon-arrow-left"></span>
             </a>
@@ -51,7 +51,7 @@ class NavigateQuestion extends React.Component {
 
       case 'next':
         return (
-          <h1 className="col-md-6 text-right">
+          <h1 className="col-xs-6 text-right">
             <a href={url.href()} title="Next">
               <span className="glyphicon glyphicon-arrow-right"></span>
             </a>
@@ -83,12 +83,8 @@ class QuestionAnswer extends React.Component {
       xAxis: {
         categories: props.questionOptions
       },
-      yAxis: {
-        title: {
-          text: 'Frequency'
-        }
-      },
       series: [{
+        name: 'Frequency',
         data: this.getAnswersFrequency(props.answers, props.questionOptions)
       }]
     };

@@ -46,7 +46,10 @@ class LoginForm extends React.Component {
             <label>Password</label>
             <input type="password" className="form-control" id="password" placeholder="Password" />
           </div>
-          <button type="submit" className="btn btn-default">Submit</button>
+          <div className="btn-toolbar">
+            <button type="submit" className="btn btn-success">Submit</button>
+            <a href="register.html" className="btn btn-default">Create new account</a>
+          </div>
         </form>
       </div>
     );

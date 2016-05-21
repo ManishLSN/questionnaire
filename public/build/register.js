@@ -19213,9 +19213,18 @@ var RegisterForm = function (_React$Component) {
             _react2.default.createElement('input', { type: 'password', className: 'form-control', id: 'confirm-password', placeholder: 'Confirm password' })
           ),
           _react2.default.createElement(
-            'button',
-            { type: 'submit', className: 'btn btn-default' },
-            'Submit'
+            'div',
+            { className: 'btn-toolbar' },
+            _react2.default.createElement(
+              'button',
+              { type: 'submit', className: 'btn btn-success' },
+              'Submit'
+            ),
+            _react2.default.createElement(
+              'a',
+              { href: 'login.html', className: 'btn btn-default' },
+              'Log in'
+            )
           )
         )
       );
@@ -19225,6 +19234,14 @@ var RegisterForm = function (_React$Component) {
   return RegisterForm;
 }(_react2.default.Component);
 
-_reactDom2.default.render(_react2.default.createElement(RegisterForm, null), mountNode);
+dpd.ques.get(function (result, err) {
+  dpd.users.me(function (user) {
+    if (user) {
+      window.location.href = 'participant.html?question=' + result[0].id;
+    } else {
+      _reactDom2.default.render(_react2.default.createElement(RegisterForm, null), mountNode);
+    }
+  });
+});
 
 },{"react":158,"react-dom":2}]},{},[159]);

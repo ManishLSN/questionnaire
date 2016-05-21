@@ -19139,9 +19139,18 @@ var LoginForm = function (_React$Component) {
             _react2.default.createElement('input', { type: 'password', className: 'form-control', id: 'password', placeholder: 'Password' })
           ),
           _react2.default.createElement(
-            'button',
-            { type: 'submit', className: 'btn btn-default' },
-            'Submit'
+            'div',
+            { className: 'btn-toolbar' },
+            _react2.default.createElement(
+              'button',
+              { type: 'submit', className: 'btn btn-success' },
+              'Submit'
+            ),
+            _react2.default.createElement(
+              'a',
+              { href: 'register.html', className: 'btn btn-default' },
+              'Create new account'
+            )
           )
         )
       );

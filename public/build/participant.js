@@ -22420,7 +22420,7 @@ var UserLogout = function (_React$Component2) {
         React.createElement(
           'button',
           { type: 'button', className: 'btn btn-success logout' },
-          'Logout'
+          'Log out'
         )
       );
     }

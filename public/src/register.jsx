@@ -100,11 +100,23 @@ class RegisterForm extends React.Component {
             <label>Confirm password</label>
             <input type="password" className="form-control" id="confirm-password" placeholder="Confirm password" />
           </div>
-          <button type="submit" className="btn btn-default">Submit</button>
+          <div className="btn-toolbar">
+            <button type="submit" className="btn btn-success">Submit</button>
+            <a href="login.html" className="btn btn-default">Log in</a>
+          </div>
         </form>
       </div>
     );
   }
 }
 
-ReactDOM.render(<RegisterForm />, mountNode);
+dpd.ques.get(function(result, err) {
+  dpd.users.me(function(user) {
+    if (user) {
+      window.location.href = 'participant.html?question=' + result[0].id;
+    }
+    else {
+      ReactDOM.render(<RegisterForm />, mountNode);
+    }
+  });
+});
