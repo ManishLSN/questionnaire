@@ -1,1 +1,0 @@
-emit('message', 'abc');
