@@ -159,7 +159,7 @@ dpd.users.me(function(user) {
   else {
     ReactDOM.render(
       <p className="lead">
-        Please <a href="login.html">login</a> before participating
+        Please <a href="name.html">enter your name</a> before participating
       </p>, mountNode);
   }
 });
