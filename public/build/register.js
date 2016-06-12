@@ -19079,13 +19079,14 @@ var RegisterForm = function (_React$Component) {
       $('form').submit(function (event) {
         event.preventDefault();
 
+        var name = $('#name').val();
         var username = $('#username').val();
         var email = $('#email').val();
         var password = $('#password').val();
         var confirmPassword = $('#confirm-password').val();
         var query = {};
 
-        if (username == '' || email == '' || password == '') {
+        if (username == '' || email == '' || password == '' || name == '') {
           $('#alert-warning').addClass('in');
           $('#alert-warning strong').text('Enter all information');
 
@@ -19118,7 +19119,7 @@ var RegisterForm = function (_React$Component) {
               } else {
                 // Everything is alright.
                 // Store data to database.
-                dpd.users.post({ "username": username, "password": password, "email": email }, function (user, err) {
+                dpd.users.post({ "username": username, "password": password, "email": email, "name": name }, function (user, err) {
                   if (err) return console.log(err);
                   $('#alert-warning').removeClass('in');
                   $('#alert-success').addClass('in');
@@ -19172,6 +19173,16 @@ var RegisterForm = function (_React$Component) {
         _react2.default.createElement(
           'form',
           null,
+          _react2.default.createElement(
+            'div',
+            { className: 'form-group' },
+            _react2.default.createElement(
+              'label',
+              null,
+              'Name'
+            ),
+            _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'name', placeholder: 'Name' })
+          ),
           _react2.default.createElement(
             'div',
             { className: 'form-group' },

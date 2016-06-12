@@ -14,13 +14,14 @@ class RegisterForm extends React.Component {
     $('form').submit(function(event) {
       event.preventDefault();
 
+      let name = $('#name').val();
       let username = $('#username').val();
       let email = $('#email').val();
       let password = $('#password').val();
       let confirmPassword = $('#confirm-password').val();
       let query = {};
 
-      if ((username == '') || (email == '') || (password == '')) {
+      if ((username == '') || (email == '') || (password == '') || (name == '')) {
         $('#alert-warning').addClass('in');
         $('#alert-warning strong').text('Enter all information');
 
@@ -55,7 +56,7 @@ class RegisterForm extends React.Component {
             else {
               // Everything is alright.
               // Store data to database.
-              dpd.users.post({"username": username, "password": password,  "email": email}, function(user, err) {
+              dpd.users.post({"username": username, "password": password,  "email": email, "name": name}, function(user, err) {
                 if(err) return console.log(err);
                 $('#alert-warning').removeClass('in');
                 $('#alert-success').addClass('in');
@@ -84,6 +85,10 @@ class RegisterForm extends React.Component {
           <strong></strong>
         </div>
         <form>
+          <div className="form-group">
+            <label>Name</label>
+            <input type="text" className="form-control" id="name" placeholder="Name" />
+          </div>
           <div className="form-group">
             <label>Username</label>
             <input type="text" className="form-control" id="username" placeholder="Username" />
