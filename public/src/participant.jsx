@@ -150,7 +150,6 @@ dpd.users.me(function(user) {
       dpd.questionoptions.get(query, function(questionOptions, error) {
         ReactDOM.render(
           <div>
-            <UserLogout />
             <ParticipantForm question={question} questionOptions={questionOptions[0].options} userId={user.id} />
           </div>, mountNode);
       });

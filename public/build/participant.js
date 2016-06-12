@@ -22445,7 +22445,6 @@ dpd.users.me(function (user) {
         ReactDOM.render(React.createElement(
           'div',
           null,
-          React.createElement(UserLogout, null),
           React.createElement(ParticipantForm, { question: question, questionOptions: questionOptions[0].options, userId: user.id })
         ), mountNode);
       });
