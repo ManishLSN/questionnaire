@@ -3,6 +3,9 @@
 # Demo
 https://subhojit777-questionnaire.herokuapp.com
 
+# Slides
+http://slides.com/subhojit777/js-questionnaire-me
+
 # Installation
 - [Install MongoDB](https://docs.mongodb.org/manual/installation)
 - `git clone https://github.com/subhojit777/questionnaire.git && cd questionnaire`
