@@ -3,6 +3,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var URI = require('urijs');
+import {RadioGroup, Radio} from "react-radio-group";
 
 var mountNode = document.getElementById('participant-form');
 
@@ -56,14 +57,10 @@ class ParticipantForm extends React.Component {
       });
     }.bind(this));
   }
-  handleOptionChange(event) {
-    // WTF!!
-    // @TODO use https://github.com/chenglou/react-radio-group
-    if (event.target.type === 'radio') {
-      this.setState({
-        selectedOption: event.target.value
-      });
-    }
+  handleOptionChange(option) {
+    this.setState({
+      selectedOption: option
+    });
   }
   shouldComponentUpdate(nextProps, nextState) {
     // Update component ONLY IF answer post is successful.
@@ -98,18 +95,17 @@ class ParticipantForm extends React.Component {
         {alert}
         <form onSubmit={this.handlePostAnswer}>
           <h3 className="question">{this.props.question.question}</h3>
-          {/* @TODO use https://github.com/chenglou/react-radio-group */}
-          <div className="options-wrapper well" onClick={this.handleOptionChange}>
+          <RadioGroup name="options" className="options-wrapper well" onChange={this.handleOptionChange}>
             {this.props.questionOptions.map(function(currentValue, index, array) {
               return (
                 <div className="radio">
                   <label>
-                    <input type="radio" name="options" value={currentValue} /> {currentValue}
+                    <Radio value={currentValue} /> {currentValue}
                   </label>
                 </div>
               );
             })}
-          </div>
+          </RadioGroup>
           {submitButton}
         </form>
       </div>

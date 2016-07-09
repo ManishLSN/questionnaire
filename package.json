@@ -25,6 +25,7 @@
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-highcharts": "^8.1.0",
+    "react-radio-group": "^3.0.1",
     "urijs": "^1.17.1"
   },
   "devDependencies": {
