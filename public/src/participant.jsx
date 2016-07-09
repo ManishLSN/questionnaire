@@ -86,9 +86,11 @@ class ParticipantForm extends React.Component {
         </button>
         <strong>Answer submitted</strong>
       </div>
+      var submitButton = <button type="submit" className="btn btn-primary" disabled>Submit</button>
     }
     else {
       var alert = '';
+      var submitButton = <button type="submit" className="btn btn-primary">Submit</button>
     }
 
     return (
@@ -108,7 +110,7 @@ class ParticipantForm extends React.Component {
               );
             })}
           </div>
-          <button type="submit" className={this.state.success ? "btn btn-primary disabled" : "btn btn-primary"}>Submit</button>
+          {submitButton}
         </form>
       </div>
     );
