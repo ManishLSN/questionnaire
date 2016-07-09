@@ -22342,8 +22342,18 @@ var ParticipantForm = function (_React$Component) {
             'Answer submitted'
           )
         );
+        var submitButton = React.createElement(
+          'button',
+          { type: 'submit', className: 'btn btn-primary', disabled: true },
+          'Submit'
+        );
       } else {
         var alert = '';
+        var submitButton = React.createElement(
+          'button',
+          { type: 'submit', className: 'btn btn-primary' },
+          'Submit'
+        );
       }
 
       return React.createElement(
@@ -22375,11 +22385,7 @@ var ParticipantForm = function (_React$Component) {
               );
             })
           ),
-          React.createElement(
-            'button',
-            { type: 'submit', className: this.state.success ? "btn btn-primary disabled" : "btn btn-primary" },
-            'Submit'
-          )
+          submitButton
         )
       );
     }
