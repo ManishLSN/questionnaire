@@ -22559,8 +22559,8 @@ dpd.users.me(function (user) {
       'Please ',
       React.createElement(
         'a',
-        { href: 'login.html' },
-        'login'
+        { href: 'name.html' },
+        'enter your name'
       ),
       ' before participating'
     ), mountNode);
